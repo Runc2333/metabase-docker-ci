@@ -11,13 +11,7 @@ ENV FC_LANG en-US LC_CTYPE en_US.UTF-8
 # git:          ./bin/version
 # curl:         needed by script that installs Clojure CLI & Lein
 
-#curl --silent --location https://dl.yarnpkg.com/rpm/yarn.repo | sudo tee /etc/yum.repos.d/yarn.repo
-#sudo rpm --import https://dl.yarnpkg.com/rpm/pubkey.gpg
-
-#RUN yum install -y centos-release-scl-rh ; \
-# yum-config-manager --enable rhel-server-rhscl-7-rpms \
-#COPY lein  /usr/local/bin/lein
-#COPY linux-install-1.10.3.814.sh  /tmp/linux-install-1.10.3.814.sh
+RUN 
 
 RUN curl https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein -o /usr/local/bin/lein ; \
     chmod +x /usr/local/bin/lein ; \
@@ -26,17 +20,15 @@ RUN curl https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
     chmod +x /tmp/linux-install-1.11.1.1149.sh;\
     sh /tmp/linux-install-1.11.1.1149.sh
 
- 
+
 
 RUN curl --silent --location https://rpm.nodesource.com/setup_12.x | bash - ;\
-curl -sL https://dl.yarnpkg.com/rpm/yarn.repo |   tee /etc/yum.repos.d/yarn.repo 
-#   13  yum install -y nodejs  gcc-c++ make yarn
-RUN yum update -y; yum install -y  coreutils ttf-dejavu fontconfig bash nodejs yarn  git curl openssl ; \
-#    chmod +x /usr/local/bin/lein ; \
-#    /usr/local/bin/lein upgrade ; \
-#   chmod +x /tmp/linux-install-1.10.3.814.sh ; \
-#    sh /tmp/linux-install-1.10.3.814.sh ; \
-     yum clean all; yum makecache
+    curl -sL https://dl.yarnpkg.com/rpm/yarn.repo |   tee /etc/yum.repos.d/yarn.repo 
 
-#RUN    yarn config set registry https://registry.npm.taobao.org
+# Add End Point CentOS 7 repo
+RUN yum -y install https://packages.endpointdev.com/rhel/7/os/x86_64/endpoint-repo.x86_64.rpm
+
+RUN yum update -y; yum install -y coreutils ttf-dejavu fontconfig bash nodejs yarn git curl openssl ; \
+    yum clean all; yum makecache
+
 CMD ["/bin/sh"] 
