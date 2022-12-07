@@ -1,4 +1,4 @@
-FROM radishgz/centos-jdk11
+FROM eburypartners/ubuntu-jdk11-maven:latest
 
 ENV FC_LANG en-US LC_CTYPE en_US.UTF-8
 
@@ -20,15 +20,14 @@ RUN curl https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
     chmod +x /tmp/linux-install-1.11.1.1149.sh;\
     sh /tmp/linux-install-1.11.1.1149.sh
 
+# Setup nodejs 14 environment
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - ; \
+    apt-get install -y nodejs
 
-
-RUN curl --silent --location https://rpm.nodesource.com/setup_12.x | bash - ;\
-    curl -sL https://dl.yarnpkg.com/rpm/yarn.repo |   tee /etc/yum.repos.d/yarn.repo 
-
-# Add End Point CentOS 7 repo
-RUN yum -y install https://packages.endpointdev.com/rhel/7/os/x86_64/endpoint-repo.x86_64.rpm
-
-RUN yum update -y; yum install -y coreutils ttf-dejavu fontconfig bash nodejs yarn git curl openssl ; \
-    yum clean all; yum makecache
+# Setup yarn environment
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - ; \
+    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list ; \
+    apt-get update ; \
+    apt-get install -y yarn
 
 CMD ["/bin/sh"] 
