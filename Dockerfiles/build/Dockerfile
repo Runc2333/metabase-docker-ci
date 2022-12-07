@@ -27,10 +27,13 @@ RUN curl -O https://download.clojure.org/install/linux-install-1.11.1.1200.sh ; 
     ./linux-install-1.11.1.1200.sh
 
 # Setup nvm environment and install nodejs 14 & yarn
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash ; \
-    . ~/.nvm/nvm.sh ; \
-    nvm install 14 ; \
-    nvm use 14 ; \
-    npm install -g yarn
+ENV NODE_VERSION=14.21.1
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+ENV NVM_DIR=/root/.nvm
+RUN . "$NVM_DIR/nvm.sh" && nvm install ${NODE_VERSION}
+RUN . "$NVM_DIR/nvm.sh" && nvm use v${NODE_VERSION}
+RUN . "$NVM_DIR/nvm.sh" && nvm alias default v${NODE_VERSION}
+ENV PATH="/root/.nvm/versions/node/v${NODE_VERSION}/bin/:${PATH}"
+RUN npm install -g yarn
 
 CMD ["/bin/sh"] 
