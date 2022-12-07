@@ -11,7 +11,10 @@ ENV FC_LANG en-US LC_CTYPE en_US.UTF-8
 # git:          ./bin/version
 # curl:         needed by script that installs Clojure CLI & Lein
 
-RUN 
+# Install curl, git, bash, coreutils, ttf-dejavu, fontconfig
+RUN apt-get update ; \
+    apt-get install -y curl git bash coreutils ttf-dejavu fontconfig ; \
+    apt-get clean
 
 RUN curl https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein -o /usr/local/bin/lein ; \
     chmod +x /usr/local/bin/lein ; \
@@ -29,10 +32,5 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - ; \
     echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list ; \
     apt-get update ; \
     apt-get install -y yarn
-
-# Install the latest version of Clojure CLI
-RUN curl -O https://download.clojure.org/install/linux-install-1.11.1.1149.sh ; \
-    chmod +x linux-install-1.11.1.1149.sh ; \
-    ./linux-install-1.11.1.1149.sh
 
 CMD ["/bin/sh"] 
