@@ -30,4 +30,9 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - ; \
     apt-get update ; \
     apt-get install -y yarn
 
+# Install the latest version of Clojure CLI
+RUN curl -O https://download.clojure.org/install/linux-install-1.11.1.1149.sh ; \
+    chmod +x linux-install-1.11.1.1149.sh ; \
+    ./linux-install-1.11.1.1149.sh
+
 CMD ["/bin/sh"] 
